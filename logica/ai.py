@@ -23,3 +23,9 @@ class TicTacToeAI:
             if board[state[0]] == board[state[1]] == board[state[2]] and board[state[0]] != ' ':
                 return board[state[0]]
         return None
+
+    def evaluate(self, board):
+        winner = self.check_winner(board)
+        if winner == self.ai_player: return 10
+        elif winner == self.human_player: return -10
+        return 0
