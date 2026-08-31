@@ -24,8 +24,15 @@ class TicTacToeAI:
                 return board[state[0]]
         return None
 
+    # Verifica o estado atual do jogo
     def evaluate(self, board):
+        # descobre se alguém já ganhou (alinhamento 3 símbolos iguais)
         winner = self.check_winner(board)
+        
+        # caso IA tenha ganhado retorno positivo
         if winner == self.ai_player: return 10
+        # caso Humano tenha ganhado retorno negativo
         elif winner == self.human_player: return -10
-        return 0
+       
+        return 0  # empate ou ainda na partida
+        
