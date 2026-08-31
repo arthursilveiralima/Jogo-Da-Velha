@@ -2,7 +2,7 @@ import math
 
 class TicTacToeAI:
     def __init__(self, ai_player='O'):
-        # a IA vai recever O
+        # a IA vai receber 'O'
         self.ai_player = ai_player
         # garantindo que o Jogador não receba o mesmo marcador da IA
         self.human_player = 'X' if ai_player == 'O' else 'O'
