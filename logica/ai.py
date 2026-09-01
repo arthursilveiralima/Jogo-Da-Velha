@@ -36,3 +36,31 @@ class TicTacToeAI:
        
         return 0  # empate ou ainda na partida
         
+    def minimax(self, board, depth, is_max, alpha, beta):
+    # Analisa a vitória, derrota ou empate
+    score = self.evaluate(board)
+    if score == 10: return score - depth   # A IA ganhou
+    if score == -10: return score + depth  # O usuário ganhou
+    if not self.get_empty(board): return 0 # O jogo deu empate
+
+    # Vez da IA, usa o MAX
+    if is_max:
+        best = -math.inf
+        for i in self.get_empty(board):
+            board[i] = self.ai_player
+            best = max(best, self.minimax(board, depth + 1, False, alpha, beta))
+            board[i] = ' '                 # Usa o Backtracking para desfazer a jogada
+            alpha = max(alpha, best)
+            if beta <= alpha: break        # Corta o Alpha-Beta
+        return best
+
+    # Vez do usuário, usa o MIN
+    else:
+        best = math.inf
+        for i in self.get_empty(board):
+            board[i] = self.human_player
+            best = min(best, self.minimax(board, depth + 1, True, alpha, beta))
+            board[i] = ' '                 # Usa o Backtracking paradesfazer a jogada
+            beta = min(beta, best)
+            if beta <= alpha: break        # Corta Alpha-Beta
+        return best
