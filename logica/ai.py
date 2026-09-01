@@ -64,3 +64,15 @@ class TicTacToeAI:
             beta = min(beta, best)
             if beta <= alpha: break        # Corta Alpha-Beta
         return best
+    #Retorna a melhor jogada possivel para a (IA)
+    def get_best_move(self, board):
+        best_val = -math.inf
+        best_move = -1
+        for i in self.get_empty(board):
+            board[i] = self.ai_player
+            move_val = self.minimax(board, 0, False, -math.inf, math.inf)
+            board[i] = ' '
+            if move_val > best_val:
+                best_move = i
+                best_val = move_val
+        return best_move
