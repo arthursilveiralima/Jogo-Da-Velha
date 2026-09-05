@@ -1,7 +1,7 @@
 import tkinter as tk
 from visual.interface import App
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     root = tk.Tk()
     app = App(root)
     root.mainloop()
