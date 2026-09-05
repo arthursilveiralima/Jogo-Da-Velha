@@ -29,8 +29,18 @@ class App:
         tk.Button(self.root, text=" Jogar contra Robô", bg="#87CEFA", fg="black", command=self.build_difficulty_menu, **btn_config).pack(pady=15)
         tk.Button(self.root, text=" Jogar contra Amigo", bg="#98FB98", fg="black", command=lambda: self.start_game('friend'), **btn_config).pack(pady=15)
         tk.Button(self.root, text=" Testar Robô 100 vezes", bg="#FFFACD", fg="black", command=self.run_tests, **btn_config).pack(pady=15)
+        
+    def build_difficulty_menu(self):
+        self.clear_screen()
+        tk.Button(self.root, text="⬅ Voltar", font=self.font_btn, bg="#FFB6C1", command=self.build_menu).pack(anchor='nw', padx=10, pady=10)
+        tk.Label(self.root, text="Escolha a Dificuldade:", font=self.font_title, bg="#FFD1DC", fg="#FF1493").pack(pady=30)
+        
+        btn_config = {'width': 20, 'height': 2, 'font': self.font_btn, 'relief': 'ridge', 'bd': 5}
+        tk.Button(self.root, text="Fácil (Aleatório)", bg="#98FB98", command=lambda: self.set_difficulty_and_play('Fácil'), **btn_config).pack(pady=10)
+        tk.Button(self.root, text="Médio", bg="#FFFACD", command=lambda: self.set_difficulty_and_play('Médio'), **btn_config).pack(pady=10)
+        tk.Button(self.root, text="Impossível (Minimax)", bg="#FF7F50", command=lambda: self.set_difficulty_and_play('Impossível'), **btn_config).pack(pady=10)
 
-        def set_difficulty_and_play(self, diff):
+    def set_difficulty_and_play(self, diff):
         # Verifica a dificuldade escolhida e inicia o jogo
         self.difficulty = diff
         self.start_game('robot')
@@ -199,7 +209,7 @@ class App:
         btn_config = {'font': ('Comic Sans MS', 12, 'bold'), 'relief': 'ridge', 'bd': 5}
         tk.Button(btn_frame, text="🔄 Jogar Novamente", bg="#98FB98", command=lambda: [popup.destroy(), self.start_game(self.mode)], **btn_config).pack(side='left', padx=10)
         tk.Button(btn_frame, text="🏠 Menu Principal", bg="#87CEFA", command=lambda: [popup.destroy(), self.build_menu()], **btn_config).pack(side='left', padx=10)
-            def run_tests(self):
+    def run_tests(self):
         self.clear_screen()
         tk.Button(self.root, text="⬅ Voltar", font=self.font_btn, bg="#FFB6C1", command=self.build_menu).pack(anchor='nw', padx=10, pady=5)
         tk.Label(self.root, text="🏆 Teste: 100 Partidas (Robô vs Aleatório)", font=('Comic Sans MS', 16, 'bold'), bg="#FFD1DC", fg="#4B0082").pack()
