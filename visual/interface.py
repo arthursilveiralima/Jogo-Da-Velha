@@ -199,3 +199,64 @@ class App:
         btn_config = {'font': ('Comic Sans MS', 12, 'bold'), 'relief': 'ridge', 'bd': 5}
         tk.Button(btn_frame, text="🔄 Jogar Novamente", bg="#98FB98", command=lambda: [popup.destroy(), self.start_game(self.mode)], **btn_config).pack(side='left', padx=10)
         tk.Button(btn_frame, text="🏠 Menu Principal", bg="#87CEFA", command=lambda: [popup.destroy(), self.build_menu()], **btn_config).pack(side='left', padx=10)
+            def run_tests(self):
+        self.clear_screen()
+        tk.Button(self.root, text="⬅ Voltar", font=self.font_btn, bg="#FFB6C1", command=self.build_menu).pack(anchor='nw', padx=10, pady=5)
+        tk.Label(self.root, text="🏆 Teste: 100 Partidas (Robô vs Aleatório)", font=('Comic Sans MS', 16, 'bold'), bg="#FFD1DC", fg="#4B0082").pack()
+        
+        legend_frame = tk.Frame(self.root, bg="#FFD1DC")
+        legend_frame.pack(pady=5)
+        tk.Label(legend_frame, text="🟩 Vitória", bg="#FFD1DC", fg="green", font=("Arial", 12, "bold")).pack(side='left', padx=10)
+        tk.Label(legend_frame, text="🟦 Empate", bg="#FFD1DC", fg="blue", font=("Arial", 12, "bold")).pack(side='left', padx=10)
+        tk.Label(legend_frame, text="🟥 Derrota (Erro)", bg="#FFD1DC", fg="red", font=("Arial", 12, "bold")).pack(side='left', padx=10)
+
+        self.canvas = tk.Canvas(self.root, width=600, height=600, bg="white", bd=3, relief="solid")
+        self.canvas.pack(pady=10)
+        self.root.update()
+        
+        for i in range(100):
+            result, final_board = self.simulate_random_game()
+            self.draw_mini_board(i, result, final_board)
+            self.root.update()
+            time.sleep(0.01)
+
+    def draw_mini_board(self, index, result, board):
+        row = index // 10
+        col = index % 10
+        x0 = col * 60
+        y0 = row * 60
+        
+        bg_color = "#C8E6C9" if result == 'O' else "#BBDEFB"
+        if result == 'X': bg_color = "#FFCDD2" 
+            
+        self.canvas.create_rectangle(x0, y0, x0+60, y0+60, fill=bg_color, outline="black")
+        
+        self.canvas.create_line(x0+20, y0, x0+20, y0+60, fill="gray")
+        self.canvas.create_line(x0+40, y0, x0+40, y0+60, fill="gray")
+        self.canvas.create_line(x0, y0+20, x0+60, y0+20, fill="gray")
+        self.canvas.create_line(x0, y0+40, x0+60, y0+40, fill="gray")
+        
+        for j in range(9):
+            bx = j % 3
+            by = j // 3
+            mark = board[j]
+            if mark != ' ':
+                m_color = "#FF4500" if mark == 'X' else "#1E90FF"
+                self.canvas.create_text(x0 + bx*20 + 10, y0 + by*20 + 10, text=mark, font=("Arial", 10, "bold"), fill=m_color)
+
+    def simulate_random_game(self):
+        board = [' '] * 9
+        turn = 'X'
+        while True:
+            winner = self.ai.check_winner(board)
+            if winner: return winner, board
+            if ' ' not in board: return 'Draw', board
+            
+            if turn == 'X':
+                move = random.choice(self.ai.get_empty(board))
+                board[move] = 'X'
+                turn = 'O'
+            else:
+                move = self.ai.get_best_move(board)
+                board[move] = 'O'
+                turn = 'X'
