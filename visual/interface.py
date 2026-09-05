@@ -138,7 +138,9 @@ class App:
             return True
         return False
 
+    # Mostra a tela de Fim de Jogo
     def show_victory_screen(self, result):
+        # Cria uma nova janela para mostrar o resultado da partida
         popup = tk.Toplevel(self.root)
         popup.title("Fim de Jogo!")
         popup.geometry("500x450")
@@ -171,4 +173,25 @@ class App:
                 speed_x = random.choice([-3, -2, -1, 0, 1, 2, 3])
                 particles.append({'id': shape, 'dx': speed_x, 'dy': speed_y})
 
+            def animate():
+                if not popup.winfo_exists(): return
+                current_color = canvas.itemcget(text_id, "fill")
+                next_color = colors[(colors.index(current_color) + 1) % len(colors)] if current_color in colors else colors[0]
+                canvas.itemconfig(text_id, fill=next_color)
+
+                for p in particles:
+                    canvas.move(p['id'], p['dx'], p['dy'])
+                    coords = canvas.coords(p['id'])
+                    if coords and coords[1] > 350:
+                        canvas.move(p['id'], 0, -400) 
+
+                popup.after(80, animate)
             
+            animate()
+
+        btn_frame = tk.Frame(popup, bg="#FFD1DC")
+        btn_frame.pack(pady=10)
+        
+        btn_config = {'font': ('Comic Sans MS', 12, 'bold'), 'relief': 'ridge', 'bd': 5}
+        tk.Button(btn_frame, text="🔄 Jogar Novamente", bg="#98FB98", command=lambda: [popup.destroy(), self.start_game(self.mode)], **btn_config).pack(side='left', padx=10)
+        tk.Button(btn_frame, text="🏠 Menu Principal", bg="#87CEFA", command=lambda: [popup.destroy(), self.build_menu()], **btn_config).pack(side='left', padx=10)
