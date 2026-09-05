@@ -173,12 +173,16 @@ class App:
                 speed_x = random.choice([-3, -2, -1, 0, 1, 2, 3])
                 particles.append({'id': shape, 'dx': speed_x, 'dy': speed_y})
 
+            # Controla a animação da tela
             def animate():
+                # Verifica se a janela ainda existe ou se ela foi fechada, para a animação
                 if not popup.winfo_exists(): return
+                # Pega a cor atual do texto e muda para a próxima cor da lista
                 current_color = canvas.itemcget(text_id, "fill")
                 next_color = colors[(colors.index(current_color) + 1) % len(colors)] if current_color in colors else colors[0]
                 canvas.itemconfig(text_id, fill=next_color)
 
+                # Percorre todas as partículas e movimenta cada uma de acordo com sua velocidade (dx e dy)
                 for p in particles:
                     canvas.move(p['id'], p['dx'], p['dy'])
                     coords = canvas.coords(p['id'])
@@ -187,7 +191,7 @@ class App:
 
                 popup.after(80, animate)
             
-            animate()
+            animate() # inicia a animação
 
         btn_frame = tk.Frame(popup, bg="#FFD1DC")
         btn_frame.pack(pady=10)
