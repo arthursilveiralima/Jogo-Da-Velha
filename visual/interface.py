@@ -136,5 +136,39 @@ class App:
             self.status_label.config(text="Empate! ")
             self.show_victory_screen("Empate")
             return True
-            
         return False
+
+    def show_victory_screen(self, result):
+        popup = tk.Toplevel(self.root)
+        popup.title("Fim de Jogo!")
+        popup.geometry("500x450")
+        popup.configure(bg="#FFD1DC")
+        popup.transient(self.root) 
+        popup.grab_set() 
+
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - 250
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - 225
+        popup.geometry(f"+{x}+{y}")
+
+        canvas = tk.Canvas(popup, width=500, height=300, bg="#FFD1DC", highlightthickness=0)
+        canvas.pack(pady=10)
+
+        colors = ["#FF1493", "#FF4500", "#1E90FF", "#32CD32", "#FFD700", "#8A2BE2"]
+        
+        if result == "Empate":
+            canvas.create_text(250, 150, text="Empate! 🤝\nFoi por pouco!", font=('Comic Sans MS', 30, 'bold'), fill="#4B0082", justify="center")
+        else:
+            text_id = canvas.create_text(250, 150, text=f"🎉 {result} VENCEU! 🎉", font=('Comic Sans MS', 40, 'bold'), fill="#FF1493")
+            
+            particles = []
+            for _ in range(80):
+                px = random.randint(0, 500)
+                py = random.randint(-300, 0)
+                size = random.randint(8, 16)
+                color = random.choice(colors)
+                shape = canvas.create_oval(px, py, px+size, py+size, fill=color, outline="") if random.random() > 0.5 else canvas.create_rectangle(px, py, px+size, py+size, fill=color, outline="")
+                speed_y = random.randint(3, 10)
+                speed_x = random.choice([-3, -2, -1, 0, 1, 2, 3])
+                particles.append({'id': shape, 'dx': speed_x, 'dy': speed_y})
+
+            
